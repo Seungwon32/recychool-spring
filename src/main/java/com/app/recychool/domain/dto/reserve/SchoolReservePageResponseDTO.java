@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -28,6 +29,11 @@ public class SchoolReservePageResponseDTO {
     private Integer price;        // PLACE = 0, PARKING = 30000
     private Integer deposit;      // PLACE = 50000, PARKING = 0
 
+    private Integer maxParkingCapacity;   // 총 수용 가능 대수
+    private Integer currentParkingCount;  // 현재 예약된 대수
+
+
     // 캘린더 제어
-    private List<LocalDate> unavailableDates;
+    private List<LocalDate> unavailableDates; // PLACE 전용
+    private Map<LocalDate, Integer> parkingCountMap; // PARKING 전용
 }
