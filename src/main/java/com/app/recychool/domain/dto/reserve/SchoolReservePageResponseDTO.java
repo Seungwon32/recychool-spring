@@ -18,6 +18,10 @@ public class SchoolReservePageResponseDTO {
     private String schoolAddress;
     private String schoolPhone;
 
+    private Integer schoolArea;
+    private String schoolImageName;
+    private String schoolImagePath;
+
     // 예약 정보 (URL에 따라 달라짐)
     private String reserveType;   // PLACE or PARKING
     private String usageTime;     // "09:00 ~ 17:00" / "18:00 ~ 08:00"
