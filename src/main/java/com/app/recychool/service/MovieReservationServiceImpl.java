@@ -28,13 +28,9 @@ public class MovieReservationServiceImpl implements MovieReservationService {
 
     @Override
     public Map<String, Long> save(MovieReservation req) {
-
-        // ✅ 1) 프론트에서 받은 건 id만 사용한다
         Long movieId = req.getMovie().getId();
         Long schoolId = req.getSchool().getId();
         Long userId = req.getUser().getId();
-
-        // ✅ 2) DB에서 진짜 엔티티를 조회한다 (없으면 에러)
         Movie movie = movieRepository.findById(movieId)
                 .orElseThrow(() -> new IllegalArgumentException("영화 없음: " + movieId));
 
@@ -44,7 +40,6 @@ public class MovieReservationServiceImpl implements MovieReservationService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("유저 없음: " + userId));
 
-        // ✅ 3) 새 예약 엔티티를 만든다 (프론트가 보낸 다른 값은 무시됨)
         MovieReservation reservation = MovieReservation.builder()
                 .movie(movie)
                 .school(school)
@@ -52,13 +47,34 @@ public class MovieReservationServiceImpl implements MovieReservationService {
                 .movieReservationDate(req.getMovieReservationDate())
                 .build();
 
-        // ✅ 4) 저장
         MovieReservation saved = movieReservationRepository.save(reservation);
-
-        // ✅ 5) 응답
         Map<String, Long> response = new HashMap<>();
         response.put("newReservationId", saved.getId());
         return response;
+    }
+
+    @Override
+    public Map<String, Long> saveByIds(Long schoolId, String movieTitle, Long userId) {
+        School school = schoolRepository.findById(schoolId)
+                .orElseThrow(() -> new IllegalArgumentException("학교 없음"));
+        
+        Movie movie = movieRepository.findAll().stream()
+                .filter(m -> movieTitle.equals(m.getMovieTitle()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("영화 없음"));
+        
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
+        
+        MovieReservation reservation = MovieReservation.builder()
+                .movie(movie)
+                .school(school)
+                .user(user)
+                .movieReservationDate(new java.util.Date())
+                .build();
+        
+        MovieReservation saved = movieReservationRepository.save(reservation);
+        return Map.of("newReservationId", saved.getId());
     }
 
     @Override
@@ -74,5 +90,9 @@ public class MovieReservationServiceImpl implements MovieReservationService {
     @Override
     public List<MovieReservation> getMyReservations(Long userId) {
         return movieReservationRepository.findMyMovieReservation(userId);
+    }
+    @Override
+    public List<School> getMovieSchools() {
+        return movieReservationRepository.findMovieSchoolNames();
     }
 }
