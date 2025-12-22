@@ -122,16 +122,16 @@ class MovieReservationRepositoryTest {
 //        System.out.println("조회된 학교 목록: " + schoolNames);
 //    }
 
-    // 개수 확인
-    @Test
-    public void testfind(){
-        movieReservationRepository.countBySchoolId(5L);
-        log.info("ID : {}", movieReservationRepository.countBySchoolId(5L));
-    }
+//    // 개수 확인
+//    @Test
+//    public void testfind(){
+//        movieReservationRepository.countBySchoolId(5L);
+//        log.info("ID : {}", movieReservationRepository.countBySchoolId(5L));
+//    }
 
     @Test
     public void testdelete(){
-        movieReservationRepository.deleteById(2L);
+        movieReservationRepository.deleteById(49L);
     }
 
     // 마이 예약

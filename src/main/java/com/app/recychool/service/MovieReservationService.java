@@ -7,13 +7,12 @@ import java.util.List;
 import java.util.Map;
 
 public interface MovieReservationService {
-    // 저장 (예약하기) - 리턴 타입 변경
-    public Map<String, Long> save(MovieReservation movieReservation);
+//    // 저장 (예약하기) - 리턴 타입 변경
+//    public Map<String, Long> save(MovieReservation movieReservation);
     
-    // ID로 간단하게 예약
+    // ID로 예약
     public Map<String, Long> saveByIds(Long schoolId, String movieTitle, Long userId);
- 
-    // 삭제 (예약 취소)
+
     public void delete(Long id);
 
     // 학교별 예매 수 확인
