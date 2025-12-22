@@ -29,12 +29,10 @@ public class MovieReservationServiceImpl implements MovieReservationService {
     public Map<String, Long> saveByIds(Long schoolId, String movieTitle, Long userId) {
         School school = schoolRepository.findById(schoolId)
                 .orElseThrow(() -> new IllegalArgumentException("학교 없음"));
-        
         Movie movie = movieRepository.findAll().stream()
                 .filter(m -> movieTitle.equals(m.getMovieTitle()))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("영화 없음"));
-        
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
         
