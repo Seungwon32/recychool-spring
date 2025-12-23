@@ -13,6 +13,8 @@ public interface ReserveService {
             ReserveCreateRequestDTO requestDTO
     );
 
+    public void cancelReserve(Long reserveId, Long userId);
+
 
 
 

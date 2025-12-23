@@ -55,7 +55,7 @@ public class ReserveQueryServiceImpl implements ReserveQueryService {
             deposit = 0;
             usageTime = "18:00 ~ 08:00";
 
-            // ✔ 주차 최대 수용 인원 (면적 / 25, 소수점 버림)
+            // ✔ 주차 최대 수용 인원 (면적 / 100, 소수점 버림)
             maxParkingCapacity = school.getSchoolArea() / PARKING_AREA_PER_CAR;
         }
 
