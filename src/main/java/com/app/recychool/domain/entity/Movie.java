@@ -26,7 +26,7 @@ public class Movie {
     private String movieTitle;
     private String movieTime;
     private Integer moviePeopleAll;
-    private LocalDateTime movieStartDate;
+    private LocalDateTime movieStartDate; // 상영 날짜
 
     @OneToMany(mappedBy = "movie")
     @JsonIgnore

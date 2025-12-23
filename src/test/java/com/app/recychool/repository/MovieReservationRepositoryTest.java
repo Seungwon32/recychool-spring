@@ -47,18 +47,24 @@ class MovieReservationRepositoryTest {
                 .orElseThrow(() -> new IllegalStateException("tbl_movie 데이터가 없습니다"));
 
         School school = schools.stream()
-                .filter(s -> "영평초".equals(s.getSchoolName()))
+                .filter(s -> "구.백성초".equals(s.getSchoolName()))
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("학교명=영평초 데이터가 없습니다"));
 
-        MovieReservation reservation1 = MovieReservation.builder()
-                .movie(movie)
-                .school(school)
-                .movieReservationDate(new Date())
-                .user(user)
-                .build();
+        for (int i = 0; i < 30; i++) {
 
-        movieReservationRepository.save(reservation1);
+            Random random = new Random();
+
+            Movie randomMovie = movies.get(random.nextInt(movies.size()));
+
+            MovieReservation reservation = MovieReservation.builder()
+                    .movie(randomMovie)
+                    .school(school)
+                    .user(null)
+                    .build();
+
+            movieReservationRepository.save(reservation);
+        }
     }
 
 
@@ -82,7 +88,7 @@ class MovieReservationRepositoryTest {
             MovieReservation schedule = MovieReservation.builder()
                     .movie(movie)
                     .school(targetSchool)
-                    .movieReservationDate(new Date()) // 행사 날짜(원하는 날짜로 바꾸면 됨)
+                    .movieReservationDate(new Date())
                     .user(null)
                     .build();
 
