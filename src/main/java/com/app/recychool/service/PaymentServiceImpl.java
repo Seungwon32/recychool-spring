@@ -32,7 +32,14 @@ public class PaymentServiceImpl implements PaymentService {
                         new IllegalArgumentException("예약이 존재하지 않습니다. reserveId=" + requestDTO.getReserveId())
                 );
 
-        // 2) 결제 중복 정책
+        //  서버 기준 결제 가능 상태 검증
+        if (reserve.getReserveStatus() != ReserveStatus.PENDING) {
+            throw new PaymentAlreadyProcessedException(
+                    "결제 가능한 상태가 아닙니다. reserveStatus=" + reserve.getReserveStatus()
+            );
+        }
+
+        // 3) 결제 중복 정책
         // 장소 대여: 예약 1건당 결제 1건만 허용
         if (reserve.getReserveType() == ReserveType.PLACE) {
             if (paymentRepository.existsByReserve_Id(reserve.getId())) {
@@ -47,12 +54,14 @@ public class PaymentServiceImpl implements PaymentService {
             }
         }
 
-        // 3) impUid 중복 차단 (모든 결제 공통)
+
         if (paymentRepository.existsByImpUid(requestDTO.getImpUid())) {
-            throw new PaymentAlreadyProcessedException("이미 처리된 결제입니다. impUid=" + requestDTO.getImpUid());
+            throw new PaymentAlreadyProcessedException(
+                    "이미 처리된 결제입니다. impUid=" + requestDTO.getImpUid()
+            );
         }
 
-        // 4) 결제 저장
+        // 5) 결제 저장
         Payment payment = Payment.builder()
                 .reserve(reserve)
                 .paymentPrice(reserve.getReservePrice())
@@ -64,7 +73,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         Payment saved = paymentRepository.save(payment);
 
-        // 5) 예약 상태 업데이트 (연장 결제여도 상태는 COMPLETED 유지)
+        // 6) 예약 상태 업데이트
         reserve.setReserveStatus(ReserveStatus.COMPLETED);
 
         return new PaymentCompleteResponseDTO(
